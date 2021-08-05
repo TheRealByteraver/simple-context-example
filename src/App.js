@@ -1,25 +1,51 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import { Provider } from './Context';
+import ContextClient from './ContextClient';
 
-function App() {
+export default function App() {
+
+  const [userData, setUserData] = useState({
+    credentials: {
+      username: 'erland',
+      password: '1234'
+    },
+    name: {
+      first: 'erland',
+      last: 'van olmen'
+    }
+  });
+
+  const setCredentials = (username, password) => {
+    setUserData(prevState => {
+      return { 
+        ...prevState,
+        credentials: { username, password } 
+      };
+    });
+    console.log('called setCredentials');
+  }  
+
+  const setName = (first, last) => {
+    setUserData(prevState => {
+      return { 
+        ...prevState,
+        name: { first, last } 
+      };
+    });
+    console.log('called setName');
+  }
+
+  // Provider requires a value prop, usually an application state 
+  // together with actions and event handlers
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Provider value={{
+      userData,
+      actions: {
+        setCredentials,
+        setName
+      }
+    }}>
+      <ContextClient />
+    </Provider>
   );
 }
-
-export default App;
